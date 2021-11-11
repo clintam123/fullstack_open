@@ -20,55 +20,61 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    const personObject = { name: newName, number: newNumber };
-    const person = persons.filter(
-      (person) => person.name === personObject.name
-    );
-    if (person.length > 0) {
-      const updatedPerson = { ...person[0], number: newNumber };
+    const personObject = {
+      name: newName,
+      number: newNumber,
+      id: Math.floor(Math.random() * 101),
+    };
+
+    if (
+      persons.filter((person) => person.name === personObject.name).length > 0
+    ) {
       if (
         window.confirm(
-          `${updatedPerson.name} is already added to phonebook, replace the old number with the new one?`
+          `${newName} is already added to phonebook, replace the old number with the new one?`
         )
       ) {
+        const updatedPerson = persons.find((n) => n.name === newName);
         pbServices
-          .update(updatedPerson.id, updatedPerson)
+          .update(updatedPerson.id, { ...updatedPerson, number: newNumber })
           .then((p) => {
             setPersons(
               persons.map((personObj) =>
-                personObj.id === updatedPerson.id ? p : personObj
+                personObj.name === newName ? p : personObj
               )
             );
-            setNewName("");
-            setNewNumber("");
-            setMessage(`${updatedPerson.name} was successfully updated`);
-            setTimeout(() => {
-              setMessage(null);
-            }, 6000);
           })
           .catch((error) => {
-            console.log(error);
-            setPersons(persons.filter((p) => p.id !== updatedPerson.id));
-            setNewName("");
-            setNewNumber("");
-            setMessage(
-              `ERROR: ${updatedPerson.name} was already deleted from the server`
-            );
-            setTimeout(() => {
-              setMessage(null);
-            }, 6000);
+            setMessage(`ERROR: ${error.response.data.error}`);
+            console.log(error.response.data);
           });
-      }
-    } else {
-      pbServices.create(personObject).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
+        setPersons(persons);
         setNewName("");
         setNewNumber("");
-        setMessage(`${newName} was successfully added`);
+        setMessage(`${updatedPerson.name} was successfully updated`);
         setTimeout(() => {
           setMessage(null);
         }, 6000);
-      });
+      }
+    } else {
+      pbServices
+        .create(personObject)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName("");
+          setNewNumber("");
+          setMessage(`${newName} was successfully added`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 6000);
+        })
+        .catch((error) => {
+          setMessage(`ERROR: ${error.response.data.error}`);
+          console.log(error.response.data);
+        });
+      setTimeout(() => {
+        setMessage(null);
+      }, 6000);
     }
   };
 
