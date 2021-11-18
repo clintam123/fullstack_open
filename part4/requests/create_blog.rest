@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRhbSIsImlkIjoiNjE5NjA1YTgzYjljNjIzODRkNzY1NDE4IiwiaWF0IjoxNjM3MjM1NTk1LCJleHAiOjE2MzcyMzkxOTV9.bP2lHp04KJ2xQlUUb1wMknt-rHWhN2TPUALubDXq-30
+
+{
+    "title": "Genshin Impact",
+    "author": "Do Duc Tam",
+    "url": "https://genshin.mihoyo.com/en/",
+    "likes" : 100
+}

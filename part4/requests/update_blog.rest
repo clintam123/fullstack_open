@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/618e4214a2c0a5bc0b9ddc43
+Content-Type: application/json
+
+{
+    "title": "Genshin Impact",
+    "author": "Do Duc Tam",
+    "url": "https://genshin.mihoyo.com/en/",
+    "likes" : 10
+}
