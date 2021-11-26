@@ -60,7 +60,7 @@ const BlogForm = ({ addBlog }) => {
       </div>
       <div>
         Url:
-        <input id="url" type="text" value={url} onChange={handleUrlChange} />
+        <input id="url" type="url" value={url} onChange={handleUrlChange} />
       </div>
       <div>
         Likes:
@@ -71,7 +71,7 @@ const BlogForm = ({ addBlog }) => {
           onChange={handleLikeChange}
         />
       </div>
-      <button type="submit">create</button>
+      <button id="create-button" type="submit">create</button>
     </form>
   );
 };

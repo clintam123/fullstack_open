@@ -32,7 +32,6 @@ const App = () => {
 
     try {
       const user = await loginService.login({ username, password });
-
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
@@ -84,8 +83,8 @@ const App = () => {
 
   const updateBlog = async (blogObject) => {
     try {
-      console.log(blogObject);
       const response = await blogService.update(blogObject);
+      console.log(blogObject);
       console.log(response);
       setBlogs(
         blogs.map((blog) => (blog.id !== blogObject.id ? blog : blogObject))
@@ -124,15 +123,13 @@ const App = () => {
   };
 
   const loginForm = () => (
-    <Togglable buttonLabel="log in">
-      <LoginForm
-        username={username}
-        password={password}
-        handleUsernameChange={({ target }) => setUsername(target.value)}
-        handlePasswordChange={({ target }) => setPassword(target.value)}
-        handleLogin={handleLogin}
-      />
-    </Togglable>
+    <LoginForm
+      username={username}
+      password={password}
+      handleUsernameChange={({ target }) => setUsername(target.value)}
+      handlePasswordChange={({ target }) => setPassword(target.value)}
+      handleLogin={handleLogin}
+    />
   );
 
   const blogFormRef = useRef();
@@ -152,7 +149,7 @@ const App = () => {
       ) : (
         <div>
           <h2>blogs</h2>
-          <p>{user.name} logged-in</p>
+          <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
           <br />
           <h2>Create new blog</h2>
@@ -160,7 +157,6 @@ const App = () => {
           {blogs
             .sort((x, y) => y.likes - x.likes)
             .map((blog) => {
-              console.log(blog);
               return (
                 <Blog
                   key={blog.id}

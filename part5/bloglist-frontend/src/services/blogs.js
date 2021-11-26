@@ -18,16 +18,19 @@ const getAll = () => {
 
 const create = async (blog) => {
   const response = await axios.post(baseUrl, blog, config);
+  console.log(response);
   return response.data;
 };
 
 const update = async (blog) => {
   const response = await axios.put(`${baseUrl}/${blog.id}`, blog, config);
+  console.log(response);
   return response.data;
 };
 
 const remove = async (blog) => {
   const response = await axios.delete(`${baseUrl}/${blog.id}`, config);
+  console.log(response);
   return response.data;
 };
 
