@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRhbSIsImlkIjoiNjE5NjA1YTgzYjljNjIzODRkNzY1NDE4IiwiaWF0IjoxNjM3MjM1NTk1LCJleHAiOjE2MzcyMzkxOTV9.bP2lHp04KJ2xQlUUb1wMknt-rHWhN2TPUALubDXq-30
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRhbSIsImlkIjoiNjE5NjA1YTgzYjljNjIzODRkNzY1NDE4IiwiaWF0IjoxNjM3OTA0NzU5LCJleHAiOjE2Mzc5MDgzNTl9.01bwY14fZ6otwbRhywmhF9UBVtm8oRdiYuE0ZXpbcdo
 
 {
     "title": "Genshin Impact",
