@@ -9,15 +9,18 @@ const notificationReducer = (state = "", action) => {
   }
 };
 
+let prevId = 0;
+
 export const setNotification = (notification, time) => {
   return async (dispatch) => {
+    clearTimeout(prevId);
     dispatch({
       type: "SET_NOTIFICATION",
       data: {
         notification,
       },
     });
-    setTimeout(() => {
+    prevId = setTimeout(() => {
       dispatch({
         type: "CLEAR_NOTIFICATION",
       });
