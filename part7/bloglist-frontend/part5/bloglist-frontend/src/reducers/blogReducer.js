@@ -21,7 +21,6 @@ const blogReducer = (state = [], action) => {
 export const initializeBlogs = () => {
   return async (dispatch) => {
     const blogs = await blogService.getAll();
-    console.log(blogs);
     dispatch({
       type: "INIT_BLOGS",
       data: blogs,
@@ -49,7 +48,7 @@ export const deleteBlog = (blog) => {
       await blogService.remove(blog.id);
       dispatch({ type: "DELETE_BLOG", data: blog.id });
       dispatch(
-        setNotification(`Blog ${blog.title} successfully updated`, "success", 5)
+        setNotification(`Blog ${blog.title} successfully deleted`, "success", 5)
       );
     } catch (err) {
       dispatch(setNotification("cannot delete blog", "error", 5));
