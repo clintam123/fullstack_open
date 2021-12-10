@@ -1,7 +1,6 @@
 import React from "react";
-import Togglable from "./Togglable";
-import { useDispatch, useSelector } from "react-redux";
-import { like, deleteBlog } from "../reducers/blogReducer";
+import { useDispatch } from "react-redux";
+import { like, deleteBlog, comment } from "../reducers/blogReducer";
 import { useHistory } from "react-router-dom";
 
 const Blog = ({ blog }) => {
@@ -15,8 +14,6 @@ const Blog = ({ blog }) => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const users = useSelector((state) => state.users);
-  const foundUser = users.find((user) => user.id === blog.user);
 
   const increaseLikes = () => {
     dispatch(like(blog));
@@ -27,6 +24,13 @@ const Blog = ({ blog }) => {
     history.push("/blogs");
   };
 
+  const handleComment = (event) => {
+    event.preventDefault();
+    const commentToAdd = event.target.comment.value;
+    event.target.comment.value = "";
+    dispatch(comment(blog, commentToAdd));
+  };
+
   if (!blog) {
     return null;
   }
@@ -34,16 +38,28 @@ const Blog = ({ blog }) => {
   return (
     <div className="blog" style={blogStyle}>
       {blog.title} - {blog.author} <br />
-      <Togglable buttonLabel="view">
-        {blog.url} <br />
-        likes : {blog.likes} <button onClick={increaseLikes}>like</button>
-        <br />
-        {foundUser.name}
-        <br />
-        <button id="remove-button" onClick={removeBlog}>
-          remove
-        </button>
-      </Togglable>
+      {blog.url} <br />
+      likes : {blog.likes} <button onClick={increaseLikes}>like</button>
+      <br />
+      {blog.user.name}
+      <br />
+      <button id="remove-button" onClick={removeBlog}>
+        remove
+      </button>
+      <h3>comments</h3>
+      <form onSubmit={handleComment}>
+        <div>
+          <input id="comment" type="text" name="comment" />
+          <button id="comment-button" type="submit">
+            add comment
+          </button>
+        </div>
+      </form>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment}>{comment}</li>
+        ))}
+      </ul>
     </div>
   );
 };

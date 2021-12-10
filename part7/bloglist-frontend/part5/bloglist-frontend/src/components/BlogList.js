@@ -14,11 +14,13 @@ const BlogList = () => {
 
   return blogs.sort(byLikes).map((blog) => (
     <table key={blog.id}>
-      <tr>
-        <td style={style}>
-          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-        </td>
-      </tr>
+      <tbody>
+        <tr>
+          <td style={style}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </td>
+        </tr>
+      </tbody>
     </table>
   ));
 };

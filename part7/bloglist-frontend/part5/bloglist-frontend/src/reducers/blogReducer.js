@@ -13,6 +13,10 @@ const blogReducer = (state = [], action) => {
       const id = action.data.id;
       return state.map((blog) => (blog.id === id ? action.data : blog));
     }
+    case "COMMENT": {
+      const id = action.data.id;
+      return state.map((blog) => (blog.id === id ? action.data : blog));
+    }
     default:
       return state;
   }
@@ -74,6 +78,32 @@ export const like = (blog) => {
       );
     } catch (err) {
       dispatch(setNotification(`cannot like blog ${blog.title}`, "error", 5));
+    }
+  };
+};
+
+export const comment = (blog, comment) => {
+  return async (dispatch) => {
+    try {
+      if (comment === "") {
+        throw new Error();
+      }
+      const blogBeforeUpdate = await blogService.update({
+        ...blog,
+        comments: blog.comments.concat(comment),
+      });
+      const blogAfterUpdate = {
+        ...blogBeforeUpdate,
+        comments: blogBeforeUpdate.comments.concat(comment),
+      };
+      dispatch({ type: "COMMENT", data: blogAfterUpdate });
+      dispatch(
+        setNotification(`Blog ${blog.title} successfully updated`, "success", 5)
+      );
+    } catch (err) {
+      dispatch(
+        setNotification(`cannot comment blog ${blog.title}`, "error", 5)
+      );
     }
   };
 };
