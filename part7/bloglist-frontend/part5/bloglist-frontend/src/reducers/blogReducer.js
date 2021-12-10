@@ -37,6 +37,7 @@ export const createBlog = (blog) => {
         setNotification(`Blog ${blog.title} successfully updated`, "success", 5)
       );
     } catch (err) {
+      console.log(err);
       dispatch(setNotification(`cannot create blog ${blog.title}`, "error", 5));
     }
   };

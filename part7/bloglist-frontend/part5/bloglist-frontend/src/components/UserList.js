@@ -1,11 +1,15 @@
 import React from "react";
-import User from "./User";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const UserList = () => {
   const users = useSelector((state) => state.users);
-  console.log(users);
-  return users.map((user) => <User key={user.id} user={user} />);
+  return users.map((user) => (
+    <div key={user.id}>
+      <Link to={`/users/${user.id}`}>{user.name} </Link>
+      created {user.blogs.length} blogs
+    </div>
+  ));
 };
 
 export default UserList;

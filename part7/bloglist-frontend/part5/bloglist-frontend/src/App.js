@@ -8,17 +8,20 @@ import LoginForm from "./components/LoginForm";
 import BlogList from "./components/BlogList";
 import Menu from "./components/Menu";
 import UserList from "./components/UserList";
+import User from "./components/User";
+import Blog from "./components/Blog";
 
-import { Switch, Route, useHistory } from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 
 import { initializeBlogs } from "./reducers/blogReducer";
-import { initializeUser, logout } from "./reducers/userReducer";
+import { initializeUser } from "./reducers/userReducer";
 import { initializeAllUsers } from "./reducers/usersReducer";
 
 const App = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
   const user = useSelector((state) => state.user);
+  const users = useSelector((state) => state.users);
+  const blogs = useSelector((state) => state.blogs);
 
   useEffect(() => {
     dispatch(initializeUser());
@@ -27,25 +30,51 @@ const App = () => {
   }, [dispatch]);
 
   const blogFormRef = useRef();
-  const handleLogout = async (event) => {
-    event.preventDefault();
-    dispatch(logout());
-    history.push("/");
-  };
+
+  const userMatch = useRouteMatch("/users/:id");
+  const foundUser = userMatch
+    ? users.find((user) => user.id === userMatch.params.id)
+    : null;
+
+  const blogMatch = useRouteMatch("/blogs/:id");
+  const foundBlog = blogMatch
+    ? blogs.find((blog) => blog.id === blogMatch.params.id)
+    : null;
 
   return (
     <Switch>
+      <Route path="/users/:id">
+        <Notification />
+        {user === null ? (
+          <LoginForm />
+        ) : (
+          <div>
+            <Menu />
+            <h2>blog app</h2>
+            <User user={foundUser} />
+          </div>
+        )}
+      </Route>
+      <Route path="/blogs/:id">
+        <Notification />
+        {user === null ? (
+          <LoginForm />
+        ) : (
+          <div>
+            <Menu />
+            <h2>blog app</h2>
+            <Blog blog={foundBlog} />
+          </div>
+        )}
+      </Route>
       <Route path="/blogs">
         <Notification />
         {user === null ? (
           <LoginForm />
         ) : (
           <div>
-            <h2>blogs</h2>
             <Menu />
-            <p>{user.name} logged in</p>
-            <button onClick={handleLogout}>logout</button>
-            <br />
+            <h2>blog app</h2>
             <h2>Create new blog</h2>
             <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
               <BlogForm />
@@ -60,11 +89,8 @@ const App = () => {
           <LoginForm />
         ) : (
           <div>
-            <h2>blogs</h2>
             <Menu />
-            <p>{user.name} logged in</p>
-            <button onClick={handleLogout}>logout</button>
-            <br />
+            <h2>blog app</h2>
             <h2>Users</h2>
             <UserList />
           </div>
