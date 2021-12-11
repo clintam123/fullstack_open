@@ -2,6 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 
+import { TextField, Button } from "@mui/material";
+
 const BlogForm = () => {
   const dispatch = useDispatch();
 
@@ -20,20 +22,17 @@ const BlogForm = () => {
   return (
     <form onSubmit={handleCreateBlog}>
       <div>
-        Title:
-        <input id="title" type="text" name="title" />
+        <TextField name="title" id="title" label="Title" variant="filled" />
       </div>
       <div>
-        Author:
-        <input id="author" type="text" name="author" />
+        <TextField name="author" id="author" label="Author" variant="filled" />
       </div>
       <div>
-        Url:
-        <input id="url" type="url" name="url" />
+        <TextField name="url" id="url" label="Url" variant="filled" />
       </div>
-      <button id="create-button" type="submit">
+      <Button variant="contained" color="primary" type="submit">
         create
-      </button>
+      </Button>
     </form>
   );
 };

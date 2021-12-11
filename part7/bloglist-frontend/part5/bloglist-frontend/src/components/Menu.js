@@ -3,10 +3,9 @@ import { Link, useHistory } from "react-router-dom";
 import { logout } from "../reducers/userReducer";
 import { useSelector, useDispatch } from "react-redux";
 
+import { AppBar, Toolbar, Button } from "@mui/material";
+
 const Menu = () => {
-  const padding = {
-    paddingRight: 5,
-  };
   const history = useHistory();
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -18,17 +17,20 @@ const Menu = () => {
   };
 
   return (
-    <div>
-      <Link to="/blogs" style={padding}>
-        blogs
-      </Link>
-      <Link to="/users" style={padding}>
-        users
-      </Link>
-      {user.name} logged in
-      <button onClick={handleLogout}>logout</button>
-      <br />
-    </div>
+    <AppBar position="static">
+      <Toolbar>
+        <Button color="inherit" component={Link} to="/blogs">
+          blogs
+        </Button>
+        <Button color="inherit" component={Link} to="/users">
+          users
+        </Button>
+        <em>{user.name} logged in </em>
+        <Button color="inherit" onClick={handleLogout}>
+          logout
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 

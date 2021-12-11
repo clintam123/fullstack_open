@@ -3,15 +3,21 @@ import { useDispatch } from "react-redux";
 import { like, deleteBlog, comment } from "../reducers/blogReducer";
 import { useHistory } from "react-router-dom";
 
-const Blog = ({ blog }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  Button,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 
+const Blog = ({ blog }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -36,30 +42,76 @@ const Blog = ({ blog }) => {
   }
 
   return (
-    <div className="blog" style={blogStyle}>
-      {blog.title} - {blog.author} <br />
-      {blog.url} <br />
-      likes : {blog.likes} <button onClick={increaseLikes}>like</button>
-      <br />
-      {blog.user.name}
-      <br />
-      <button id="remove-button" onClick={removeBlog}>
+    <div className="blog">
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell width="10%">Title</TableCell>
+              <TableCell>{blog.title}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Author</TableCell>
+              <TableCell>{blog.author}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Url</TableCell>
+              <TableCell>{blog.url}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Likes</TableCell>
+              <TableCell>
+                {blog.likes}{" "}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={increaseLikes}
+                >
+                  like
+                </Button>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Added by user</TableCell>
+              <TableCell>{blog.user.name}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Button
+        variant="contained"
+        color="primary"
+        id="remove-button"
+        onClick={removeBlog}
+      >
         remove
-      </button>
+      </Button>
       <h3>comments</h3>
       <form onSubmit={handleComment}>
         <div>
-          <input id="comment" type="text" name="comment" />
-          <button id="comment-button" type="submit">
-            add comment
-          </button>
+          <TextField
+            id="comment"
+            name="comment"
+            label="comment"
+            variant="filled"
+          />
         </div>
+        <Button
+          id="comment-button"
+          type="submit"
+          variant="contained"
+          color="primary"
+        >
+          add comment
+        </Button>
       </form>
-      <ul>
+      <List>
         {blog.comments.map((comment) => (
-          <li key={comment}>{comment}</li>
+          <ListItem key={comment.id}>
+            <ListItemText primary={comment} />
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </div>
   );
 };

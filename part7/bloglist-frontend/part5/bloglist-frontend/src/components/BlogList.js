@@ -1,28 +1,36 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 const BlogList = () => {
   const blogs = useSelector((state) => state.blogs);
 
   const byLikes = (b1, b2) => b2.likes - b1.likes;
 
-  const style = {
-    border: "1px solid black",
-    padding: 8,
-  };
-
-  return blogs.sort(byLikes).map((blog) => (
-    <table key={blog.id}>
-      <tbody>
-        <tr>
-          <td style={style}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  ));
+  return (
+    <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          {blogs.sort(byLikes).map((blog) => (
+            <TableRow key={blog.id}>
+              <TableCell>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </TableCell>
+              <TableCell>{blog.user.name}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 };
 
 export default BlogList;

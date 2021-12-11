@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/userReducer";
 import { useHistory } from "react-router-dom";
 
+import { TextField, Button } from "@mui/material";
+
 const LoginForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -20,16 +22,19 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleLogin}>
       <div>
-        Username
-        <input id="username" type="text" name="username" />
+        <TextField name="username" label="username" variant="outlined" />
       </div>
       <div>
-        Password
-        <input id="password" type="password" name="password" />
+        <TextField
+          name="password"
+          label="password"
+          variant="outlined"
+          type="password"
+        />
       </div>
-      <button id="login-button" type="submit">
+      <Button variant="contained" color="primary" type="submit">
         login
-      </button>
+      </Button>
     </form>
   );
 };

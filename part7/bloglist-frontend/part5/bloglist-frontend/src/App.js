@@ -17,6 +17,8 @@ import { initializeBlogs } from "./reducers/blogReducer";
 import { initializeUser } from "./reducers/userReducer";
 import { initializeAllUsers } from "./reducers/usersReducer";
 
+import { Container } from "@mui/material";
+
 const App = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -42,65 +44,67 @@ const App = () => {
     : null;
 
   return (
-    <Switch>
-      <Route path="/users/:id">
-        <Notification />
-        {user === null ? (
+    <Container>
+      <Switch>
+        <Route path="/users/:id">
+          <Notification />
+          {user === null ? (
+            <LoginForm />
+          ) : (
+            <div>
+              <Menu />
+              <h2>blog app</h2>
+              <User user={foundUser} />
+            </div>
+          )}
+        </Route>
+        <Route path="/blogs/:id">
+          <Notification />
+          {user === null ? (
+            <LoginForm />
+          ) : (
+            <div>
+              <Menu />
+              <h2>blog app</h2>
+              <Blog blog={foundBlog} />
+            </div>
+          )}
+        </Route>
+        <Route path="/blogs">
+          <Notification />
+          {user === null ? (
+            <LoginForm />
+          ) : (
+            <div>
+              <Menu />
+              <h2>blog app</h2>
+              <h2>Create new blog</h2>
+              <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
+                <BlogForm />
+              </Togglable>
+              <BlogList />
+            </div>
+          )}
+        </Route>
+        <Route path="/users">
+          <Notification />
+          {user === null ? (
+            <LoginForm />
+          ) : (
+            <div>
+              <Menu />
+              <h2>blog app</h2>
+              <h2>Users</h2>
+              <UserList />
+            </div>
+          )}
+        </Route>
+        <Route path="/">
+          <Notification />
           <LoginForm />
-        ) : (
-          <div>
-            <Menu />
-            <h2>blog app</h2>
-            <User user={foundUser} />
-          </div>
-        )}
-      </Route>
-      <Route path="/blogs/:id">
-        <Notification />
-        {user === null ? (
-          <LoginForm />
-        ) : (
-          <div>
-            <Menu />
-            <h2>blog app</h2>
-            <Blog blog={foundBlog} />
-          </div>
-        )}
-      </Route>
-      <Route path="/blogs">
-        <Notification />
-        {user === null ? (
-          <LoginForm />
-        ) : (
-          <div>
-            <Menu />
-            <h2>blog app</h2>
-            <h2>Create new blog</h2>
-            <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
-              <BlogForm />
-            </Togglable>
-            <BlogList />
-          </div>
-        )}
-      </Route>
-      <Route path="/users">
-        <Notification />
-        {user === null ? (
-          <LoginForm />
-        ) : (
-          <div>
-            <Menu />
-            <h2>blog app</h2>
-            <h2>Users</h2>
-            <UserList />
-          </div>
-        )}
-      </Route>
-      <Route path="/">
-        <Notification />
-        <LoginForm />
-      </Route>
-    </Switch>
+        </Route>
+      </Switch>
+    </Container>
   );
 };
 
