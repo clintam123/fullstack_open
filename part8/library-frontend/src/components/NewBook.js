@@ -4,7 +4,8 @@ import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from "../queries";
 
 const NewBook = ({ show, notify }) => {
   const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
+  const [authorName, setAuthorName] = useState("");
+  const [authorBorn, setAuthorBorn] = useState(null);
   const [published, setPublished] = useState("");
   const [genre, setGenre] = useState("");
   const [genres, setGenres] = useState([]);
@@ -24,11 +25,19 @@ const NewBook = ({ show, notify }) => {
   const submit = async (event) => {
     event.preventDefault();
 
-    createBook({ variables: { title, author, published, genres } });
+    createBook({
+      variables: {
+        title,
+        author: { name: authorName, born: authorBorn },
+        published,
+        genres,
+      },
+    });
 
     setTitle("");
     setPublished("");
-    setAuthor("");
+    setAuthorName("");
+    setAuthorBorn(null);
     setGenres([]);
     setGenre("");
   };
@@ -49,10 +58,17 @@ const NewBook = ({ show, notify }) => {
           />
         </div>
         <div>
-          author
+          author name
           <input
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
+            value={authorName}
+            onChange={({ target }) => setAuthorName(target.value)}
+          />
+        </div>
+        <div>
+          author born
+          <input
+            value={authorBorn}
+            onChange={({ target }) => setAuthorBorn(parseInt(target.value))}
           />
         </div>
         <div>

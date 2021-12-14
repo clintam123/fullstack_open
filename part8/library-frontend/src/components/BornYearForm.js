@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { EDIT_AUTHOR, ALL_AUTHORS } from "../queries";
 import Select from "react-select";
 
-const BornYearForm = ({ notify, authors }) => {
+const BornYearForm = ({ setError, authors }) => {
   const [nameOptions, setNameOptions] = useState(null);
   const [born, setBorn] = useState("");
 
@@ -11,7 +11,7 @@ const BornYearForm = ({ notify, authors }) => {
     refetchQueries: [{ query: ALL_AUTHORS }],
     onError: (error) => {
       console.log(error);
-      notify(error.graphQLErrors[0].message);
+      setError(error.graphQLErrors[0].message);
     },
   });
 
@@ -25,9 +25,9 @@ const BornYearForm = ({ notify, authors }) => {
 
   useEffect(() => {
     if (result.data && !result.data.editAuthor) {
-      notify("Author not found");
+      setError("Author not found");
     }
-  }, [result.data]);
+  }, [result.data]); // eslint-disable-line
 
   const submit = (event) => {
     event.preventDefault();
