@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { GET_USER, ALL_BOOKS_BY_GENRE } from "../queries";
+import { GET_USER, ALL_BOOKS } from "../queries";
 
 const RecommendedBooks = ({ show }) => {
   const user = useQuery(GET_USER);
-  const [getFavoriteBooks, result] = useLazyQuery(ALL_BOOKS_BY_GENRE);
+  const [getFavoriteBooks, result] = useLazyQuery(ALL_BOOKS);
   const [favoriteBooks, setFavoriteBooks] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const RecommendedBooks = ({ show }) => {
     if (result.data) {
       setFavoriteBooks(result.data.allBooks);
     }
-  }, [result.data]);
+  }, [result]);
 
   if (!show) {
     return null;
