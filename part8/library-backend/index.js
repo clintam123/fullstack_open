@@ -101,18 +101,18 @@ const resolvers = {
       if (args.author) {
         const foundAuthor = await Author.findOne({ name: args.author });
         if (foundAuthor) {
-          if (args.genres) {
+          if (args.genre) {
             return await Book.find({
               author: foundAuthor,
-              genres: { $in: [args.genres] },
+              genres: { $in: [args.genre] },
             }).populate("author");
           }
           return await Book.find({ author: foundAuthor }).populate("author");
         }
         return null;
       }
-      if (args.genres) {
-        return await Book.find({ genres: { $in: [args.genres] } }).populate(
+      if (args.genre) {
+        return await Book.find({ genres: { $in: [args.genre] } }).populate(
           "author"
         );
       }
