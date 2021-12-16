@@ -8,7 +8,7 @@ import RecommendedBooks from "./components/RecommendedBooks";
 
 import { useApolloClient, useSubscription } from "@apollo/client";
 
-import { BOOK_ADDED } from "./queries";
+import { BOOK_ADDED, ALL_BOOKS } from "./queries";
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -24,11 +24,24 @@ const App = () => {
   const [token, setToken] = useState(null);
   const client = useApolloClient();
 
+  const updateCacheWith = (addedBook) => {
+    const includedIn = (set, object) =>
+      set.map((p) => p.id).includes(object.id);
+
+    const dataInStore = client.readQuery({ query: ALL_BOOKS });
+    if (!includedIn(dataInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: dataInStore.allBooks.concat(addedBook) },
+      });
+    }
+  };
+
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      console.log(subscriptionData);
-      //const addedBook = subscriptionData.data.bookAdded;
+      const addedBook = subscriptionData.data.bookAdded;
       window.alert(`Book ${subscriptionData.data.bookAdded.title} added`);
+      updateCacheWith(addedBook);
     },
   });
 

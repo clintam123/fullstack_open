@@ -28,7 +28,10 @@ const NewBook = ({ show, setError }) => {
     createBook({
       variables: {
         title,
-        author: { name: authorName, born: authorBorn },
+        author: {
+          name: authorName,
+          born: authorBorn === "" ? null : authorBorn,
+        },
         published,
         genres,
       },
