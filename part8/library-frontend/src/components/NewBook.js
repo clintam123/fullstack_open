@@ -5,7 +5,7 @@ import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from "../queries";
 const NewBook = ({ show, notify }) => {
   const [title, setTitle] = useState("");
   const [authorName, setAuthorName] = useState("");
-  const [authorBorn, setAuthorBorn] = useState(null);
+  const [authorBorn, setAuthorBorn] = useState("");
   const [published, setPublished] = useState("");
   const [genre, setGenre] = useState("");
   const [genres, setGenres] = useState([]);
@@ -37,7 +37,7 @@ const NewBook = ({ show, notify }) => {
     setTitle("");
     setPublished("");
     setAuthorName("");
-    setAuthorBorn(null);
+    setAuthorBorn("");
     setGenres([]);
     setGenre("");
   };

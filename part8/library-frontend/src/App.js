@@ -6,7 +6,9 @@ import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import RecommendedBooks from "./components/RecommendedBooks";
 
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useSubscription } from "@apollo/client";
+
+import { BOOK_ADDED } from "./queries";
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -21,6 +23,13 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [token, setToken] = useState(null);
   const client = useApolloClient();
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      console.log(subscriptionData);
+      window.alert(`Book ${subscriptionData.data.bookAdded.title} added`);
+    },
+  });
 
   const notify = (message) => {
     setErrorMessage(message);

@@ -37,7 +37,7 @@ const RecommendedBooks = ({ show }) => {
             <th>published</th>
           </tr>
           {favoriteBooks.map((a) => (
-            <tr key={a.id}>
+            <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
               <td>{a.published}</td>

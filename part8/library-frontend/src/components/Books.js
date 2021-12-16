@@ -61,7 +61,9 @@ const Books = ({ show }) => {
         </tbody>
       </table>
       {genres.map((g) => (
-        <button onClick={() => setSelectedGenre(g)}>{g}</button>
+        <button key={g} onClick={() => setSelectedGenre(g)}>
+          {g}
+        </button>
       ))}
     </div>
   );
