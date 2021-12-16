@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from "../queries";
 
-const NewBook = ({ show, notify }) => {
+const NewBook = ({ show, setError }) => {
   const [title, setTitle] = useState("");
   const [authorName, setAuthorName] = useState("");
   const [authorBorn, setAuthorBorn] = useState("");
@@ -14,7 +14,7 @@ const NewBook = ({ show, notify }) => {
     refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
     onError: (error) => {
       console.log(error);
-      notify(error.graphQLErrors[0].message);
+      setError(error.graphQLErrors[0].message);
     },
   });
 
@@ -67,6 +67,7 @@ const NewBook = ({ show, notify }) => {
         <div>
           author born
           <input
+            type="number"
             value={authorBorn}
             onChange={({ target }) => setAuthorBorn(parseInt(target.value))}
           />
