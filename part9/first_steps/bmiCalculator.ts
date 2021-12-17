@@ -3,18 +3,21 @@ interface BmiValues {
   weightInKg: number;
 }
 
-const parseBmiArguments = (args: Array<string>): BmiValues => {
-  if (args.length < 4) throw new Error("Not enough arguments");
-  if (args.length > 4) throw new Error("Too many arguments");
-
-  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
-    return { heightInCm: Number(args[2]), weightInKg: Number(args[3]) };
+export const parseBmiArguments = (
+  heightInCm: number,
+  weightInKg: number
+): BmiValues => {
+  if (!isNaN(heightInCm) && !isNaN(weightInKg)) {
+    return { heightInCm: heightInCm, weightInKg: weightInKg };
   } else {
     throw new Error("Provided values were not numbers!");
   }
 };
 
-const calculateBmi = (heightInCm: number, weightInKg: number): string => {
+export const calculateBmi = (
+  heightInCm: number,
+  weightInKg: number
+): string => {
   const heightInMeters = heightInCm / 100;
   const bmi = weightInKg / (heightInMeters * heightInMeters);
   switch (true) {
@@ -36,14 +39,3 @@ const calculateBmi = (heightInCm: number, weightInKg: number): string => {
       return "Obese (Class III)";
   }
 };
-
-try {
-  const { heightInCm, weightInKg } = parseBmiArguments(process.argv);
-  console.log(calculateBmi(heightInCm, weightInKg));
-} catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
-  }
-  console.log(errorMessage);
-}
