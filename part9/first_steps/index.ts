@@ -1,7 +1,12 @@
 import express from "express";
 import { parseBmiArguments, calculateBmi } from "./bmiCalculator";
+import {
+  parseExerciseArguments,
+  calculateExercises,
+} from "./exerciseCalculator";
 
 const app = express();
+app.use(express.json());
 
 app.get("/hello", (_req, res) => {
   res.send("Hello Full Stack!");
@@ -14,7 +19,7 @@ app.get("/bmi", (req, res) => {
   if (!weight || !height) {
     res.status(400);
     res.json({
-      error: "malformatted parameters",
+      error: "parameters missing",
     });
   } else {
     try {
@@ -29,7 +34,30 @@ app.get("/bmi", (req, res) => {
       });
     } catch (err) {
       res.status(400);
-      res.send(err.message);
+      res.json({ error: "malformatted parameters" });
+    }
+  }
+});
+
+app.post("/exercises", (req, res) => {
+  // eslint-disable-next-line
+  const body = req.body;
+  // eslint-disable-next-line
+  const req_target = body.target,
+    daily_exercises = body.daily_exercises;
+  if (!req_target || !daily_exercises) {
+    res.status(400);
+    res.json({ error: "parameters missing" });
+  } else {
+    try {
+      const { target, dailyExerciseHours } = parseExerciseArguments(
+        req_target,
+        daily_exercises
+      );
+      res.json(calculateExercises(target, dailyExerciseHours));
+    } catch (err) {
+      res.status(400);
+      res.json({ error: "malformatted parameters" });
     }
   }
 });

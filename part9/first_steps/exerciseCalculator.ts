@@ -13,14 +13,10 @@ interface ExerciseValues {
   dailyExerciseHours: Array<number>;
 }
 
-const parseExerciseArguments = (args: Array<string>): ExerciseValues => {
-  if (args.length < 4) throw new Error("Not enough arguments");
-
-  const target = parseFloat(args[2]);
-  const dailyExerciseHours = args
-    .slice(3, args.length)
-    .map((a) => parseFloat(a));
-
+export const parseExerciseArguments = (
+  target: number,
+  dailyExerciseHours: Array<number>
+): ExerciseValues => {
   if (!isNaN(target) && !dailyExerciseHours.some(isNaN)) {
     return { target, dailyExerciseHours };
   } else {
@@ -28,10 +24,10 @@ const parseExerciseArguments = (args: Array<string>): ExerciseValues => {
   }
 };
 
-const calculateExercises = (
+export const calculateExercises = (
   target: number,
   dailyExerciseHours: Array<number>
-) => {
+): Result => {
   const periodLength = dailyExerciseHours.length;
   const trainingDays = dailyExerciseHours.filter((hour) => hour > 0).length;
   const average = dailyExerciseHours.reduce((a, b) => a + b, 0) / periodLength;
@@ -59,14 +55,3 @@ const calculateExercises = (
     average,
   };
 };
-
-try {
-  const { target, dailyExerciseHours } = parseExerciseArguments(process.argv);
-  console.log(calculateExercises(target, dailyExerciseHours));
-} catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
-  }
-  console.log(errorMessage);
-}
