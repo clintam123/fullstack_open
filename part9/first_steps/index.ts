@@ -39,10 +39,13 @@ app.get("/bmi", (req, res) => {
   }
 });
 
+interface RequestBody {
+  target: number;
+  daily_exercises: Array<number>;
+}
+
 app.post("/exercises", (req, res) => {
-  // eslint-disable-next-line
-  const body = req.body;
-  // eslint-disable-next-line
+  const body = req.body as RequestBody;
   const req_target = body.target,
     daily_exercises = body.daily_exercises;
   if (!req_target || !daily_exercises) {
