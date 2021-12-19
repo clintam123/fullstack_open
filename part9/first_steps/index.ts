@@ -18,7 +18,7 @@ app.get("/bmi", (req, res) => {
 
   if (!weight || !height) {
     res.status(400);
-    res.json({
+    res.send({
       error: "parameters missing",
     });
   } else {
@@ -27,14 +27,14 @@ app.get("/bmi", (req, res) => {
         Number(height),
         Number(weight)
       );
-      res.json({
+      res.send({
         weight: weightInKg,
         height: heightInCm,
         bmi: calculateBmi(heightInCm, weightInKg),
       });
     } catch (err) {
       res.status(400);
-      res.json({ error: "malformatted parameters" });
+      res.send({ error: "malformatted parameters" });
     }
   }
 });
@@ -50,17 +50,17 @@ app.post("/exercises", (req, res) => {
     daily_exercises = body.daily_exercises;
   if (!req_target || !daily_exercises) {
     res.status(400);
-    res.json({ error: "parameters missing" });
+    res.send({ error: "parameters missing" });
   } else {
     try {
       const { target, dailyExerciseHours } = parseExerciseArguments(
         req_target,
         daily_exercises
       );
-      res.json(calculateExercises(target, dailyExerciseHours));
+      res.send(calculateExercises(target, dailyExerciseHours));
     } catch (err) {
       res.status(400);
-      res.json({ error: "malformatted parameters" });
+      res.send({ error: "malformatted parameters" });
     }
   }
 });
