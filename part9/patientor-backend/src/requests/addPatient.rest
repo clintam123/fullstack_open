@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "name": "Do Duc Tam",
-    "dateOfBirth": "1979-01-30",
+    "dateOfBirth": "1979-12-15",
     "ssn": "300179-77A",
     "gender": "male",
     "occupation": "Cop"
