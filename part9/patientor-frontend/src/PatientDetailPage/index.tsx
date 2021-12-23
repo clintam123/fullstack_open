@@ -5,27 +5,27 @@ import { useParams } from "react-router-dom";
 
 import { apiBaseUrl } from "../constants";
 import { Patient, Gender } from "../types";
-import { useStateValue, setPatientDetail } from "../state";
+import { useStateValue, setPatientDetails } from "../state";
 
 const PatientDetailPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patientDetails }, dispatch] = useStateValue();
   const [patient, setPatient] = useState<Patient | undefined>();
 
   useEffect(() => {
     const fetchPatientDetail = async () => {
       try {
-        const { data: patientDetailFromApi } = await axios.get<Patient>(
+        const { data: patientDetailsFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-        setPatient(patientDetailFromApi);
-        dispatch(setPatientDetail(patientDetailFromApi));
+        setPatient(patientDetailsFromApi);
+        dispatch(setPatientDetails(patientDetailsFromApi));
       } catch (err) {
         console.error(err);
       }
     };
-    if (patients[id] && patients[id].ssn) {
-      setPatient(patients[id]);
+    if (patientDetails[id]) {
+      setPatient(patientDetails[id]);
     } else {
       void fetchPatientDetail();
     }
@@ -60,7 +60,12 @@ const PatientDetailPage = () => {
               <ul key={entry.id}>
                 <li>Date: {entry.date}</li>
                 <li>Description: {entry.description}</li>
-                <li>Diagnosis codes: {entry.diagnosisCodes?.join(", ")}</li>
+                <li>Diagnosis codes</li>
+                <ul>
+                  {entry.diagnosisCodes?.map((code) => (
+                    <li key={code}>{code}</li>
+                  ))}
+                </ul>
               </ul>
             ))}
           </Segment>
