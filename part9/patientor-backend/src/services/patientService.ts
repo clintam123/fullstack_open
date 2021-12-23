@@ -21,11 +21,10 @@ const getPatientById = (id: string): Patient | undefined => {
 };
 
 const addPatient = (patient: NewPatient): Patient => {
-  //eslint-disable-next-line
-  const id: string = uuid();
-  const newPatient = {
-    id: id,
+  const newPatient: Patient = {
+    id: uuid(),
     ...patient,
+    entries: [],
   };
   patients.push(newPatient);
   return newPatient;
