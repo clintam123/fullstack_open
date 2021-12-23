@@ -9,7 +9,7 @@ import { useStateValue, setPatientDetails } from "../state";
 
 const PatientDetailPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patientDetails }, dispatch] = useStateValue();
+  const [{ patientDetails, diagnoses }, dispatch] = useStateValue();
   const [patient, setPatient] = useState<Patient | undefined>();
 
   useEffect(() => {
@@ -63,7 +63,9 @@ const PatientDetailPage = () => {
                 <li>Diagnosis codes</li>
                 <ul>
                   {entry.diagnosisCodes?.map((code) => (
-                    <li key={code}>{code}</li>
+                    <li key={code}>
+                      {code}: {diagnoses[code].name}
+                    </li>
                   ))}
                 </ul>
               </ul>
