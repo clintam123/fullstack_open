@@ -8,6 +8,7 @@ import { useStateValue } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
+import PatientDetailPage from "./PatientDetailPage";
 
 const App = () => {
   const [, dispatch] = useStateValue();
@@ -20,8 +21,13 @@ const App = () => {
           `${apiBaseUrl}/patients`
         );
         dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
-      } catch (e) {
-        console.error(e);
+      } catch (error: unknown) {
+        let errorMessage = "Something went wrong.";
+        if (axios.isAxiosError(error) && error.response) {
+          const str = error.response.data.message as string;
+          errorMessage += " Error: " + str;
+        }
+        console.error(errorMessage);
       }
     };
     void fetchPatientList();
@@ -37,6 +43,9 @@ const App = () => {
           </Button>
           <Divider hidden />
           <Switch>
+            <Route path="/patients/:id">
+              <PatientDetailPage />
+            </Route>
             <Route path="/">
               <PatientListPage />
             </Route>
