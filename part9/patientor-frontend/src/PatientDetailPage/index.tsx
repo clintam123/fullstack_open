@@ -6,10 +6,11 @@ import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
 import { Patient, Gender } from "../types";
 import { useStateValue, setPatientDetails } from "../state";
+import EntryDetails from "../components/EntryDetails";
 
 const PatientDetailPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patientDetails, diagnoses }, dispatch] = useStateValue();
+  const [{ patientDetails }, dispatch] = useStateValue();
   const [patient, setPatient] = useState<Patient | undefined>();
 
   useEffect(() => {
@@ -57,18 +58,17 @@ const PatientDetailPage = () => {
           <Segment>
             <h2>Entries</h2>
             {patient.entries.map((entry) => (
-              <ul key={entry.id}>
-                <li>Date: {entry.date}</li>
-                <li>Description: {entry.description}</li>
-                <li>Diagnosis codes</li>
-                <ul>
-                  {entry.diagnosisCodes?.map((code) => (
-                    <li key={code}>
-                      {code}: {diagnoses[code].name}
-                    </li>
-                  ))}
-                </ul>
-              </ul>
+              <div
+                key={entry.id}
+                style={{
+                  border: "solid 2px",
+                  marginTop: 10,
+                  marginBottom: 10,
+                  padding: 5,
+                }}
+              >
+                <EntryDetails entry={entry} />
+              </div>
             ))}
           </Segment>
         </>
