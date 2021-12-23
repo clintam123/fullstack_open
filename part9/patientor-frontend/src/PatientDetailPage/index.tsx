@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Icon, SemanticICONS } from "semantic-ui-react";
+import { Card, Icon, Segment, SemanticICONS } from "semantic-ui-react";
 import { useParams } from "react-router-dom";
 
 import { apiBaseUrl } from "../constants";
@@ -45,14 +45,26 @@ const PatientDetailPage = () => {
   return (
     <>
       {patient && (
-        <Card>
-          <Card.Content header={patient.name} />
-          <Card.Content description={`occupation: ${patient.occupation}`} />
-          <Card.Content extra>
-            <Icon name={genderIcon(patient.gender)} />
-            {patient.ssn}
-          </Card.Content>
-        </Card>
+        <>
+          <Card>
+            <Card.Content header={patient.name} />
+            <Card.Content description={`occupation: ${patient.occupation}`} />
+            <Card.Content extra>
+              <Icon name={genderIcon(patient.gender)} />
+              {patient.ssn}
+            </Card.Content>
+          </Card>
+          <Segment>
+            <h2>Entries</h2>
+            {patient.entries.map((entry) => (
+              <ul key={entry.id}>
+                <li>Date: {entry.date}</li>
+                <li>Description: {entry.description}</li>
+                <li>Diagnosis codes: {entry.diagnosisCodes?.join(", ")}</li>
+              </ul>
+            ))}
+          </Segment>
+        </>
       )}
     </>
   );
