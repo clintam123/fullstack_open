@@ -124,7 +124,7 @@ const toNewPatientEntry = (object: any): NewEntry => {
         type: "OccupationalHealthcare",
         employerName: parseString("employerName", object.employerName),
       };
-      if (object.sickLeave.startDate && object.sickLeave.endDate) {
+      if (object.sickLeave && object.sickLeave.startDate && object.sickLeave.endDate) {
         const sickLeave = {
           startDate: parseDate(object.sickLeave.startDate),
           endDate: parseDate(object.sickLeave.endDate),
