@@ -12,6 +12,8 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
+export type NewBaseEntry = Omit<BaseEntry, "id">;
+
 export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,
@@ -45,6 +47,15 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
+type NewHospitalEntry = Omit<HospitalEntry, "id">;
+type NewOccupationalHealthcareEntry = Omit<OccupationalHealthcareEntry, "id">;
+type NewHealthCheckEntry = Omit<HealthCheckEntry, "id">;
+
+export type NewEntry =
+  | NewHospitalEntry
+  | NewOccupationalHealthcareEntry
+  | NewHealthCheckEntry;
 
 export interface Patient {
   id: string;
