@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   NewPatient,
   Gender,
@@ -57,21 +58,22 @@ const parseDiagnosisCodes = (
   return diagnosisCodes;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isHealthCheckRating = (params: any): params is HealthCheckRating => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  return Object.values(HealthCheckRating).includes(params);
+const isRating = (param: number): param is HealthCheckRating => {
+  return Object.values(HealthCheckRating).includes(param);
 };
 
-const parseHealthCheckRating = (
-  healthCheckRating: unknown
-): HealthCheckRating => {
-  if (!healthCheckRating || !isHealthCheckRating(healthCheckRating)) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const parseRating = (rating: any): HealthCheckRating => {
+  if (!rating) {
+    throw new Error(`Missing rating`);
+  }
+  const ratingNumber: number = parseInt(rating);
+  if (isNaN(ratingNumber) || !isRating(ratingNumber)) {
     throw new Error(
-      "Incorrect or missing healthCheckRating: " + healthCheckRating
+      `Incorrect rating number: ${Object.values(HealthCheckRating).join(" | ")}`
     );
   }
-  return healthCheckRating;
+  return ratingNumber;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -105,7 +107,7 @@ const toNewPatientEntry = (object: any): NewEntry => {
       return {
         ...newBaseEntry,
         type: "HealthCheck",
-        healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
+        healthCheckRating: parseRating(object.healthCheckRating),
       };
 
     case "Hospital":
@@ -124,7 +126,11 @@ const toNewPatientEntry = (object: any): NewEntry => {
         type: "OccupationalHealthcare",
         employerName: parseString("employerName", object.employerName),
       };
-      if (object.sickLeave && object.sickLeave.startDate && object.sickLeave.endDate) {
+      if (
+        object.sickLeave &&
+        object.sickLeave.startDate &&
+        object.sickLeave.endDate
+      ) {
         const sickLeave = {
           startDate: parseDate(object.sickLeave.startDate),
           endDate: parseDate(object.sickLeave.endDate),

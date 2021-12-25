@@ -3,8 +3,8 @@ Content-Type: application/json
 
 {
     "date": "2019-08-05",
-    "type": "OccupationalHealthcare",
+    "type": "HealthCheck",
     "specialist": "MD House",
-    "employerName": "HyPD",
-    "description": "Patient mistakenly found himself in a nuclear plant waste site without protection gear. Very minor radiation poisoning. "
+    "description": "Patient mistakenly found himself in a nuclear plant waste site without protection gear. Very minor radiation poisoning. ",
+    "healthCheckRating": "1"
 }
