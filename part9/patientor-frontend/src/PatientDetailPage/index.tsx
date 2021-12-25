@@ -1,17 +1,44 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Icon, Segment, SemanticICONS } from "semantic-ui-react";
+import { Card, Icon, Segment, SemanticICONS, Button } from "semantic-ui-react";
 import { useParams } from "react-router-dom";
 
 import { apiBaseUrl } from "../constants";
-import { Patient, Gender } from "../types";
+import { Patient, Gender, Entry } from "../types";
 import { useStateValue, setPatientDetails } from "../state";
 import EntryDetails from "../components/EntryDetails";
+
+import { EntryFormValues } from "../AddEntryModal/AddEntryForm";
+import { addEntry } from "../state";
+import AddEntryModal from "../AddEntryModal";
 
 const PatientDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [{ patientDetails }, dispatch] = useStateValue();
   const [patient, setPatient] = useState<Patient | undefined>();
+
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      const { data: newEntry } = await axios.post<Entry>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      dispatch(addEntry(id, newEntry));
+      closeModal();
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     const fetchPatientDetail = async () => {
@@ -71,6 +98,13 @@ const PatientDetailPage = () => {
               </div>
             ))}
           </Segment>
+          <AddEntryModal
+            modalOpen={modalOpen}
+            onSubmit={submitNewEntry}
+            error={error}
+            onClose={closeModal}
+          />
+          <Button onClick={() => openModal()}>Add New Entry</Button>
         </>
       )}
     </>

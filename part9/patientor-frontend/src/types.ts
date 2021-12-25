@@ -46,6 +46,21 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
+type NewHospitalEntry = Omit<HospitalEntry, "id">;
+type NewOccupationalHealthcareEntry = Omit<OccupationalHealthcareEntry, "id">;
+type NewHealthCheckEntry = Omit<HealthCheckEntry, "id">;
+
+export type NewEntry =
+  | NewHospitalEntry
+  | NewOccupationalHealthcareEntry
+  | NewHealthCheckEntry;
+
+export enum EntryType {
+  "HealthCheck" = "HealthCheck",
+  "Hospital" = "Hospital",
+  "OccupationalHealthcare" = "OccupationalHealthcare",
+}
+
 export interface Patient {
   id: string;
   name: string;
