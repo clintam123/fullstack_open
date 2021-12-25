@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Button, Divider, Header, Container } from "semantic-ui-react";
 
 import { apiBaseUrl } from "./constants";
-import { useStateValue, setPatientList, setDiagnosisList } from "./state";
+import { useStateValue, setPatientList, setDiagnosistList } from "./state";
+
 import { Diagnosis, Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
@@ -21,33 +22,16 @@ const App = () => {
           `${apiBaseUrl}/patients`
         );
         dispatch(setPatientList(patientListFromApi));
-      } catch (error: unknown) {
-        let errorMessage = "Something went wrong.";
-        if (axios.isAxiosError(error) && error.response) {
-          const str = error.response.data.message as string;
-          errorMessage += " Error: " + str;
-        }
-        console.error(errorMessage);
-      }
-    };
 
-    const fetchDiagnosisList = async () => {
-      try {
-        const { data: diagnosisListFromApi } = await axios.get<Diagnosis[]>(
+        const { data: diagnosesListFromApi } = await axios.get<Diagnosis[]>(
           `${apiBaseUrl}/diagnoses`
         );
-        dispatch(setDiagnosisList(diagnosisListFromApi));
-      } catch (error: unknown) {
-        let errorMessage = "Something went wrong.";
-        if (axios.isAxiosError(error) && error.response) {
-          const str = error.response.data.message as string;
-          errorMessage += " Error: " + str;
-        }
-        console.error(errorMessage);
+        dispatch(setDiagnosistList(diagnosesListFromApi));
+      } catch (e) {
+        console.error(e);
       }
     };
     void fetchPatientList();
-    void fetchDiagnosisList();
   }, [dispatch]);
 
   return (

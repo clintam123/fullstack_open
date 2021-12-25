@@ -1,24 +1,80 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
-import { Card, Icon, Segment, SemanticICONS, Button } from "semantic-ui-react";
 import { useParams } from "react-router-dom";
-
+import { Icon, Button } from "semantic-ui-react";
 import { apiBaseUrl } from "../constants";
-import { Patient, Gender, Entry } from "../types";
-import { useStateValue, setPatientDetails } from "../state";
-import EntryDetails from "../components/EntryDetails";
-
-import { EntryFormValues } from "../AddEntryModal/AddEntryForm";
-import { addEntry } from "../state";
+import { Entry, Patient } from "../types";
+import { useStateValue, addEntry, setPatient } from "../state";
+import EntryView from "./EntryView";
 import AddEntryModal from "../AddEntryModal";
+import { EntryFormValues } from "../types";
 
-const PatientDetailPage = () => {
+const PatientEntries = ({ entries }: { entries: Entry[] }) => {
+  if (!entries) {
+    return null;
+  }
+
+  if (entries.length === 0) {
+    return <h4>no health entries</h4>;
+  }
+
+  return (
+    <>
+      <h4>Entries</h4>
+      {entries.map((entry) => (
+        <EntryView key={entry.id} entry={entry} />
+      ))}
+    </>
+  );
+};
+
+const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patientDetails }, dispatch] = useStateValue();
-  const [patient, setPatient] = useState<Patient | undefined>();
+
+  const [{ patients }, dispatch] = useStateValue();
+
+  const patient = patients[id];
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
+
+  useEffect(() => {
+    const fetchPatientList = async () => {
+      try {
+        const { data: patientFromApi } = await axios.get<Patient>(
+          `${apiBaseUrl}/patients/${id}`
+        );
+        dispatch(setPatient(patientFromApi));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    if (!patient || !patient.ssn) {
+      void fetchPatientList();
+    }
+  }, [id]);
+
+  if (!patient) {
+    return null;
+  }
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    if (values.discharge && values.discharge.date.length === 0) {
+      values.discharge = undefined;
+    }
+
+    if (values.sickLeave && values.sickLeave.startDate.length === 0) {
+      values.sickLeave = undefined;
+    }
+
+    const { data: newEntry } = await axios.post<Entry>(
+      `${apiBaseUrl}/patients/${id}/entries`,
+      values
+    );
+    dispatch(addEntry(id, newEntry));
+    closeModal();
+  };
 
   const openModal = (): void => setModalOpen(true);
 
@@ -27,88 +83,34 @@ const PatientDetailPage = () => {
     setError(undefined);
   };
 
-  const submitNewEntry = async (values: EntryFormValues) => {
-    try {
-      const { data: newEntry } = await axios.post<Entry>(
-        `${apiBaseUrl}/patients/${id}/entries`,
-        values
-      );
-      dispatch(addEntry(id, newEntry));
-      closeModal();
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    const fetchPatientDetail = async () => {
-      try {
-        const { data: patientDetailsFromApi } = await axios.get<Patient>(
-          `${apiBaseUrl}/patients/${id}`
-        );
-        setPatient(patientDetailsFromApi);
-        dispatch(setPatientDetails(patientDetailsFromApi));
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    if (patientDetails[id]) {
-      setPatient(patientDetails[id]);
-    } else {
-      void fetchPatientDetail();
-    }
-  }, [id]);
-
-  const genderIcon = (gender: Gender): SemanticICONS => {
-    switch (gender) {
-      case "male":
-        return "mars";
-      case "female":
-        return "venus";
-      default:
-        return "genderless";
-    }
-  };
+  const genderIcon =
+    patient.gender === "female"
+      ? "venus"
+      : patient.gender === "male"
+      ? "mars"
+      : "genderless";
 
   return (
-    <>
-      {patient && (
-        <>
-          <Card>
-            <Card.Content header={patient.name} />
-            <Card.Content description={`occupation: ${patient.occupation}`} />
-            <Card.Content extra>
-              <Icon name={genderIcon(patient.gender)} />
-              {patient.ssn}
-            </Card.Content>
-          </Card>
-          <Segment>
-            <h2>Entries</h2>
-            {patient.entries.map((entry) => (
-              <div
-                key={entry.id}
-                style={{
-                  border: "solid 2px",
-                  marginTop: 10,
-                  marginBottom: 10,
-                  padding: 5,
-                }}
-              >
-                <EntryDetails entry={entry} />
-              </div>
-            ))}
-          </Segment>
-          <AddEntryModal
-            modalOpen={modalOpen}
-            onSubmit={submitNewEntry}
-            error={error}
-            onClose={closeModal}
-          />
-          <Button onClick={() => openModal()}>Add New Entry</Button>
-        </>
-      )}
-    </>
+    <div className="App">
+      <h3>
+        {patient.name}
+        <Icon name={genderIcon} />
+      </h3>
+
+      <div>ssn: {patient.ssn}</div>
+      <div>{patient.occupation}</div>
+
+      <PatientEntries entries={patient.entries} />
+
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button onClick={() => openModal()}>Add New Entry</Button>
+    </div>
   );
 };
 
-export default PatientDetailPage;
+export default PatientPage;

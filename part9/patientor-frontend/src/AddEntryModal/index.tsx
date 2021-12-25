@@ -1,20 +1,16 @@
 import React from "react";
 import { Modal, Segment } from "semantic-ui-react";
-import AddEntryForm, { EntryFormValues } from "./AddEntryForm";
+import AddEntryForm from "./AddEntryForm";
+import { EntryFormValues } from "../types";
 
-interface EntryProps {
+interface Props {
   modalOpen: boolean;
   onClose: () => void;
   onSubmit: (values: EntryFormValues) => void;
   error?: string;
 }
 
-const AddPatientModal = ({
-  modalOpen,
-  onClose,
-  onSubmit,
-  error,
-}: EntryProps) => (
+const AddEntryModal = ({ modalOpen, onClose, onSubmit, error }: Props) => (
   <Modal open={modalOpen} onClose={onClose} centered={false} closeIcon>
     <Modal.Header>Add a new entry</Modal.Header>
     <Modal.Content>
@@ -24,4 +20,4 @@ const AddPatientModal = ({
   </Modal>
 );
 
-export default AddPatientModal;
+export default AddEntryModal;
