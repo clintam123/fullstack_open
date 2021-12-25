@@ -9,11 +9,7 @@ import {
   SelectField,
   DiagnosisSelection,
 } from "../components/FormField";
-import {
-  HealthCheckRating,
-  EntryType,
-  NewEntry,
-} from "../types";
+import { HealthCheckRating, EntryType, NewEntry } from "../types";
 import { useStateValue } from "../state";
 
 export type EntryFormValues = NewEntry;
@@ -40,6 +36,10 @@ const entryOptions: EntryOption[] = [
     },*/
 ];
 
+const isValidDate = (date: string): boolean => {
+  return Boolean(Date.parse(date));
+};
+
 const AddEntryForm = ({ onSubmit, onCancel }: EntryProps) => {
   const [{ diagnoses }] = useStateValue();
 
@@ -65,6 +65,9 @@ const AddEntryForm = ({ onSubmit, onCancel }: EntryProps) => {
         }
         if (!values.specialist) {
           errors.specialist = requiredError;
+        }
+        if (!isValidDate(values.date)) {
+          errors.date = "Date format: YYYY-MM-DD";
         }
         return errors;
       }}
